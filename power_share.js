@@ -1,110 +1,43 @@
+function clearBox(elementID)
+{
+    document.getElementById(elementID).innerHTML = "";
+}
  
-function women_share() {
-  
-    var radius = 74,
-        padding = 10;
-
-    var color = d3.scale.ordinal()
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-    var arc = d3.svg.arc()
-        .outerRadius(radius)
-        .innerRadius(radius - 30);
-
-    var pie = d3.layout.pie()
-        .sort(null)
-        .value(function(d) { return d.population; });
-
-    d3.csv("women_share.csv", function(error, data) {
-      if (error) throw error;
-
-      
-
-      color.domain(d3.keys(data[0]).filter(function(key) { return key !== "Country"; }));
-
-      data.forEach(function(d) {
-        d.ages = color.domain().map(function(name) {
-          return {name: name, population: +d[name]};
-        });
-      });
-
-      var legend = d3.select("#plot").append("svg")
-          .attr("class", "legend")
-          .attr("width", radius * 2)
-          .attr("height", radius * 2)
-        .selectAll("g")
-          .data(color.domain().slice().reverse())
-        .enter().append("g")
-          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-      legend.append("rect")
-          .attr("width", 18)
-          .attr("height", 18)
-          .style("fill", color);
-
-      legend.append("text")
-          .attr("x", 24)
-          .attr("y", 9)
-          .attr("dy", ".35em")
-          .text(function(d) { return d; });
-
-      var svg = d3.select("#plot").selectAll(".pie")
-          .data(data)
-        .enter().append("svg")
-          .attr("class", "pie")
-          .attr("width", radius * 2)
-          .attr("height", radius * 2)
-        .append("g")
-          .attr("transform", "translate(" + radius + "," + radius + ")");
-
-      svg.selectAll(".arc")
-          .data(function(d) { return pie(d.ages); })
-        .enter().append("path")
-          .attr("class", "arc")
-          .attr("d", arc)
-          .style("fill", function(d) { return color(d.data.name); });
-
-      svg.append("text")
-          .attr("dy", ".35em")
-          .style("text-anchor", "middle")
-          .text(function(d) { return d.Country; });
-
-    });
-  }
+//$(document).ready(function () {
+    //power_share();
+//});
 
 
-
-  function man_share() {
-    document.getElementById("#plot");
+function power_share(datafile, divid) {
     
     var radius = 74,
         padding = 10;
-  
+
     var color = d3.scale.ordinal()
         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-  
+
     var arc = d3.svg.arc()
         .outerRadius(radius)
         .innerRadius(radius - 30);
-  
+
     var pie = d3.layout.pie()
         .sort(null)
         .value(function(d) { return d.population; });
-  
-    d3.csv("man_share.csv", function(error, data) {
+
+    d3.csv(datafile, function(error, data) {
       if (error) throw error;
-  
+
       
-  
+
       color.domain(d3.keys(data[0]).filter(function(key) { return key !== "Country"; }));
-  
+
       data.forEach(function(d) {
         d.ages = color.domain().map(function(name) {
           return {name: name, population: +d[name]};
         });
       });
-  
-      var legend = d3.select("#plot").append("svg")
+
+      var legend = d3.select("#divid").append("svg")
           .attr("class", "legend")
           .attr("width", radius * 2)
           .attr("height", radius * 2)
@@ -112,18 +45,18 @@ function women_share() {
           .data(color.domain().slice().reverse())
         .enter().append("g")
           .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-  
+
       legend.append("rect")
           .attr("width", 18)
           .attr("height", 18)
           .style("fill", color);
-  
+
       legend.append("text")
           .attr("x", 24)
           .attr("y", 9)
           .attr("dy", ".35em")
           .text(function(d) { return d; });
-  
+
       var svg = d3.select("#plot").selectAll(".pie")
           .data(data)
         .enter().append("svg")
@@ -132,25 +65,27 @@ function women_share() {
           .attr("height", radius * 2)
         .append("g")
           .attr("transform", "translate(" + radius + "," + radius + ")");
-  
+
       svg.selectAll(".arc")
           .data(function(d) { return pie(d.ages); })
         .enter().append("path")
           .attr("class", "arc")
           .attr("d", arc)
           .style("fill", function(d) { return color(d.data.name); });
-  
+
       svg.append("text")
           .attr("dy", ".35em")
           .style("text-anchor", "middle")
           .text(function(d) { return d.Country; });
-  
+
     });
+    
   }
 
 
+
   function dashboard(id, fData){
-    var barColor = "#a05d56";
+    var barColor = "steelblue";
     function segColor(c){ return {Year2005:"#98abc5", Year2010:"#6b486b",Year2015:"#ff8c00"}[c]; }
    
     
@@ -160,7 +95,7 @@ function women_share() {
     // function to handle histogram.
     function histoGram(fD){
         var hG={},    hGDim = {t: 60, r: 0, b: 30, l: 0};
-        hGDim.w = 500 - hGDim.l - hGDim.r, 
+        hGDim.w = 550 - hGDim.l - hGDim.r, 
         hGDim.h = 300 - hGDim.t - hGDim.b;
             
         //create svg for histogram.
@@ -242,7 +177,7 @@ function women_share() {
     
     // function to handle pieChart.
     function pieChart(pD){
-        var pC ={},    pieDim ={w:250, h: 250};
+        var pC ={},    pieDim ={w:220, h: 220};
         pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
                 
         // create svg for pie chart.
@@ -345,4 +280,82 @@ function women_share() {
     var hG = histoGram(sF), // create the histogram.
         pC = pieChart(tF), // create the pie-chart.
         leg= legend(tF);  // create the legend.
+}
+
+
+
+
+
+var causes = ["wounds", "other", "disease"];
+
+var parseDate = d3.time.format("%m/%Y").parse;
+
+var margin = {top: 20, right: 50, bottom: 30, left: 20},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width]);
+
+var y = d3.scale.linear()
+    .rangeRound([height, 0]);
+
+var z = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickFormat(d3.time.format("%b"));
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("right");
+
+var svg = d3.select("#social").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.tsv("crimea.tsv", type, function(error, crimea) {
+  if (error) throw error;
+
+  var layers = d3.layout.stack()(causes.map(function(c) {
+    return crimea.map(function(d) {
+      return {x: d.date, y: d[c]};
+    });
+  }));
+
+  x.domain(layers[0].map(function(d) { return d.x; }));
+  y.domain([0, d3.max(layers[layers.length - 1], function(d) { return d.y0 + d.y; })]).nice();
+
+  var layer = svg.selectAll(".layer")
+      .data(layers)
+    .enter().append("g")
+      .attr("class", "layer")
+      .style("fill", function(d, i) { return z(i); });
+
+  layer.selectAll("rect")
+      .data(function(d) { return d; })
+    .enter().append("rect")
+      .attr("x", function(d) { return x(d.x); })
+      .attr("y", function(d) { return y(d.y + d.y0); })
+      .attr("height", function(d) { return y(d.y0) - y(d.y + d.y0); })
+      .attr("width", x.rangeBand() - 1);
+
+  svg.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "axis axis--y")
+      .attr("transform", "translate(" + width + ",0)")
+      .call(yAxis);
+});
+
+function type(d) {
+  d.date = parseDate(d.date);
+  causes.forEach(function(c) { d[c] = +d[c]; });
+  return d;
 }

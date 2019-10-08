@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Gender Gap in Europe</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style4.css">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="power_share.js"></script>
+</head>
+
+
+
+<body onload ="power_share('women_share.csv', plot);">
+
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Gender Gap</h3>
+                <strong>BS</strong>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="index4.html">
+                        <i class="fas fa-home"></i>
+                        Home
+                    </a>
+                    <!--<ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li>
+                            <a href="#">Home 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Home 2</a>
+                        </li>
+                        <li>
+                            <a href="#">Home 3</a>
+                        </li>
+                    </ul>-->
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-briefcase"></i>
+                        About
+                    </a>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-copy"></i>
+                        Statistics
+                    </a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="power_share.html">Representation of women</a>
+                        </li>
+                        <li>
+                            <a href="salary_gap.html">Salary gap</a>
+                        </li>
+                        <li>
+                            <a href="health_gap.html">Health gap</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-image"></i>
+                        Portfolio
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-question"></i>
+                        FAQ
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-paper-plane"></i>
+                        Contact
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li>
+                    <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
+                </li>
+                <li>
+                    <a href="https://ec.europa.eu/info/sites/info/files/aid_development_cooperation_fundamental_rights/report-gender-pay-gap-eu-countries_october2018_en_0.pdf" target="blank" class="article">Back to article</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Search for...">
+                                </div><!-- /input-group -->
+                            </div>
+                        </div>
+                        <!--<ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#">Page</a>
+                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fa fa-envelope" aria-hidden="true">
+                                    <span class="badge badge-primary">11</span>
+                                  </i>
+                                  Dropdown
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                           </li>
+                        </ul>-->
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent-5">
+                            <ul class="navbar-nav ml-auto nav-flex-icons">
+                                <li class="nav-item avatar dropdown">
+                                    <a class="nav-link dropdown-toggle waves-effect waves-light" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <i class="fas fa-bell"></i><span class="badge_1 badge badge-danger ml-2">4</span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
+                                        <a class="dropdown-item waves-effect waves-light" href="#">Login <span class="badge badge-danger ml-2">4</span></a>
+                                        <a class="dropdown-item waves-effect waves-light" href="#">Register <span class="badge badge-danger ml-2">1</span></a>
+                                        <a class="dropdown-item waves-effect waves-light" href="#">Messages <span class="badge badge-danger ml-2">4</span></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        
+                        
+
+
+
+
+    
+                    </div>
+                </div>
+            </nav>
+
+
+            <div class="card-deck">
+                <div class="card card2">
+                    <div class="card-body">
+                        <i class="fas fa-female"></i>
+                        <p class="card-text">Women <br> 32,000.</p> 
+                    </div> 
+                    <hr class="hrcard">
+                    <p><i class="fas fa-sync-alt"></i>Updated now</p>
+                </div>
+
+                <div class="card card2">
+                    <div class="card-body">
+                        <i class="fas fa-male"></i>
+                        <p class="card-text">Men <br> 32,000.</p> 
+                    </div> 
+                    <hr class="hrcard">
+                    <p><i class="fas fa-sync-alt"></i>Updated now</p>
+                </div>
+
+                <div class="card card2">
+                    <div class="card-body">
+                        <i class="fas fa-database"></i>
+                        <p class="card-text">Total <br> 32,000.</p> 
+                    </div> 
+                    <hr class="hrcard">
+                    <p><i class="fas fa-sync-alt"></i>Updated now</p>
+                </div>
+            </div>
+            
+            <div class="line"></div>
+
+            <div class="card card3">
+                <div class="card-header">
+                    Gender pay gap
+                </div>
+                <div class="card-body">
+                  <blockquote class="blockquote mb-0">
+                    <p>The gender pay gap is defined as the relative difference in the average gross earnings of women and men within the economy as a whole. There are considerable differences between EU countries, with the gender pay gap ranging from less than 8% in Belgium, Italy, Luxembourg, Poland, Romania, and Slovenia to more than 20% in Austria, the Czech Republic, Germany, Estonia and United Kingdom. The graph below is the gender pay gap in EU countries across 2005, 2010 and 2015.</p>
+                    <footer class="blockquote-footer">The quote from <cite title="Source Title">European commision webpage</cite></footer>
+                  </blockquote>
+                </div>
+            </div>
+
+
+            <div id='dashboard'>
+                </div>
+                <script src="http://d3js.org/d3.v3.min.js"></script>
+            
+            
+                <script>
+            
+                var freqData=[
+                {Country:'BE',freq:{Year2005:2460,Year2010:2460,Year2015:2771}},
+                {Country:'BG',freq:{Year2005:410,Year2010:717,Year2015:830}},
+                {Country:'CZ',freq:{Year2005:1001,Year2010:1124,Year2015:1244}},
+                {Country:'DK',freq:{Year2005:2087,Year2010:2657,Year2015:2719}},
+                {Country:'DE',freq:{Year2005:2299,Year2010:2379,Year2015:2602}},
+                {Country:'EE',freq:{Year2005:785,Year2010:1016,Year2015:1199}},
+                {Country:'IE',freq:{Year2005:2324,Year2010:2823,Year2015:2808}},
+                {Country:'EL',freq:{Year2005:1577,Year2010:1754,Year2015:1754}},
+                {Country:'ES',freq:{Year2005:1600,Year2010:1814,Year2015:1937}},
+                {Country:'FR',freq:{Year2005:2025,Year2010:2049,Year2015:2310}},
+                {Country:'HR',freq:{Year2005:1364,Year2010:1364,Year2015:1364}},
+                {Country:'IT',freq:{Year2005:1789,Year2010:2036,Year2015:2134}},
+                {Country:'CY',freq:{Year2005:1006,Year2010:1976,Year2015:1845}},
+                {Country:'LV',freq:{Year2005:708,Year2010:633,Year2015:1047}},
+                {Country:'LT',freq:{Year2005:738,Year2010:894,Year2015:1036}},
+                {Country:'LU',freq:{Year2005:2737,Year2010:2848,Year2015:3322}},
+                {Country:'HU',freq:{Year2005:957,Year2010:1144,Year2015:1285}},
+                {Country:'MT',freq:{Year2005:667,Year2010:1821,Year2015:1932}},
+                {Country:'NL',freq:{Year2005:2098,Year2010:2295,Year2015:2398}},
+                {Country:'AT',freq:{Year2005:1872,Year2010:1926,Year2015:2235}},
+                {Country:'PL',freq:{Year2005:962,Year2010:1248,Year2015:1577}},
+                {Country:'PT',freq:{Year2005:1283,Year2010:1413,Year2015:1398}},
+                {Country:'RO',freq:{Year2005:559,Year2010:860,Year2015:953}},
+                {Country:'SI',freq:{Year2005:1534,Year2010:1709,Year2015:1845}},
+                {Country:'SK',freq:{Year2005:776,Year2010:1024,Year2015:1210}},
+                {Country:'FI',freq:{Year2005:1848,Year2010:2232,Year2015:2381}},
+                {Country:'SE',freq:{Year2005:2224,Year2010:2267,Year2015:2626}},
+                {Country:'UK',freq:{Year2005:2503,Year2010:2284,Year2015:2242}},
+                ];
+            
+                dashboard('#dashboard',freqData);
+                </script>
+            
+            
+            
+            
+                <script>
+            
+                var freqData=[
+                {Country:'BE',freq:{Year2005:2835,Year2010:2835,Year2015:3108}},
+                {Country:'BG',freq:{Year2005:470,Year2010:827,Year2015:970}},
+                {Country:'CZ',freq:{Year2005:1322,Year2010:1438,Year2015:1624}},
+                {Country:'DK',freq:{Year2005:2651,Year2010:3307,Year2015:3347}},
+                {Country:'DE',freq:{Year2005:2988,Year2010:3062,Year2015:3354}},
+                {Country:'EE',freq:{Year2005:1143,Year2010:1424,Year2015:1692}},
+                {Country:'IE',freq:{Year2005:3056,Year2010:3465,Year2015:3423}},
+                {Country:'EL',freq:{Year2005:2069,Year2010:2134,Year2015:2134}},
+                {Country:'ES',freq:{Year2005:2008,Year2010:2239,Year2015:2345}},
+                {Country:'FR',freq:{Year2005:2474,Year2010:2488,Year2015:2818}},
+                {Country:'HR',freq:{Year2005:1460,Year2010:1460,Year2015:1460}},
+                {Country:'IT',freq:{Year2005:2178,Year2010:2385,Year2015:2589}},
+                {Country:'CY',freq:{Year2005:1344,Year2010:2503,Year2015:2244}},
+                {Country:'LV',freq:{Year2005:844,Year2010:770,Year2015:1283}},
+                {Country:'LT',freq:{Year2005:924,Year2010:1047,Year2015:1228}},
+                {Country:'LU',freq:{Year2005:3104,Year2010:3182,Year2015:3601}},
+                {Country:'HU',freq:{Year2005:1132,Year2010:1395,Year2015:1524}},
+                {Country:'MT',freq:{Year2005:775,Year2010:2150,Year2015:2266}},
+                {Country:'NL',freq:{Year2005:2797,Year2010:2872,Year2015:3029}},
+                {Country:'AT',freq:{Year2005:2573,Year2010:2574,Year2015:2947}},
+                {Country:'PL',freq:{Year2005:1190,Year2010:1482,Year2015:1916}},
+                {Country:'PT',freq:{Year2005:1447,Year2010:1666,Year2015:1670}},
+                {Country:'RO',freq:{Year2005:608,Year2010:945,Year2015:1003}},
+                {Country:'SI',freq:{Year2005:1684,Year2010:1795,Year2015:2021}},
+                {Country:'SK',freq:{Year2005:1056,Year2010:1292,Year2015:1527}},
+                {Country:'FI',freq:{Year2005:2368,Year2010:2818,Year2015:2952}},
+                {Country:'SE',freq:{Year2005:2607,Year2010:2720,Year2015:3085}},
+                {Country:'UK',freq:{Year2005:3456,Year2010:3103,Year2015:2942}},
+                ];
+            
+                dashboard('#dashboard',freqData);
+                </script>
+            
+        </div>
+    </div>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "217f0de1b0b3fded",
+  "main": "d/217f0de1b0b3fded.js",
+  "version": "500.0.0",
+  "homepage": "https://observablehq.com/d/217f0de1b0b3fded",
+  "author": {
+    "name": "Salha Saad",
+    "url": "https://observablehq.com/@plxsas"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}

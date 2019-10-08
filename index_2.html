@@ -1,89 +1,102 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<link rel="stylesheet" href="style.css">
+<style>
 
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis--x path {
+  display: none;
+}
+
+</style>
 <body>
-    <script type="text/javascript" src="power_share.js"></script>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
 
-    <div id='dashboard'>
-    </div>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+var causes = ["wounds", "other", "disease"];
 
+var parseDate = d3.time.format("%m/%Y").parse;
 
-    <script>
+var margin = {top: 20, right: 50, bottom: 30, left: 20},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-    var freqData=[
-    {Country:'BE',freq:{Year2005:2460,Year2010:2460,Year2015:2771}},
-    {Country:'BG',freq:{Year2005:410,Year2010:717,Year2015:830}},
-    {Country:'CZ',freq:{Year2005:1001,Year2010:1124,Year2015:1244}},
-    {Country:'DK',freq:{Year2005:2087,Year2010:2657,Year2015:2719}},
-    {Country:'DE',freq:{Year2005:2299,Year2010:2379,Year2015:2602}},
-    {Country:'EE',freq:{Year2005:785,Year2010:1016,Year2015:1199}},
-    {Country:'IE',freq:{Year2005:2324,Year2010:2823,Year2015:2808}},
-    {Country:'EL',freq:{Year2005:1577,Year2010:1754,Year2015:1754}},
-    {Country:'ES',freq:{Year2005:1600,Year2010:1814,Year2015:1937}},
-    {Country:'FR',freq:{Year2005:2025,Year2010:2049,Year2015:2310}},
-    {Country:'HR',freq:{Year2005:1364,Year2010:1364,Year2015:1364}},
-    {Country:'IT',freq:{Year2005:1789,Year2010:2036,Year2015:2134}},
-    {Country:'CY',freq:{Year2005:1006,Year2010:1976,Year2015:1845}},
-    {Country:'LV',freq:{Year2005:708,Year2010:633,Year2015:1047}},
-    {Country:'LT',freq:{Year2005:738,Year2010:894,Year2015:1036}},
-    {Country:'LU',freq:{Year2005:2737,Year2010:2848,Year2015:3322}},
-    {Country:'HU',freq:{Year2005:957,Year2010:1144,Year2015:1285}},
-    {Country:'MT',freq:{Year2005:667,Year2010:1821,Year2015:1932}},
-    {Country:'NL',freq:{Year2005:2098,Year2010:2295,Year2015:2398}},
-    {Country:'AT',freq:{Year2005:1872,Year2010:1926,Year2015:2235}},
-    {Country:'PL',freq:{Year2005:962,Year2010:1248,Year2015:1577}},
-    {Country:'PT',freq:{Year2005:1283,Year2010:1413,Year2015:1398}},
-    {Country:'RO',freq:{Year2005:559,Year2010:860,Year2015:953}},
-    {Country:'SI',freq:{Year2005:1534,Year2010:1709,Year2015:1845}},
-    {Country:'SK',freq:{Year2005:776,Year2010:1024,Year2015:1210}},
-    {Country:'FI',freq:{Year2005:1848,Year2010:2232,Year2015:2381}},
-    {Country:'SE',freq:{Year2005:2224,Year2010:2267,Year2015:2626}},
-    {Country:'UK',freq:{Year2005:2503,Year2010:2284,Year2015:2242}},
-    ];
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width]);
 
-    dashboard('#dashboard',freqData);
-    </script>
+var y = d3.scale.linear()
+    .rangeRound([height, 0]);
 
+var z = d3.scale.category10();
 
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickFormat(d3.time.format("%b"));
 
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("right");
 
-    <script>
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var freqData=[
-    {Country:'BE',freq:{Year2005:2835,Year2010:2835,Year2015:3108}},
-    {Country:'BG',freq:{Year2005:470,Year2010:827,Year2015:970}},
-    {Country:'CZ',freq:{Year2005:1322,Year2010:1438,Year2015:1624}},
-    {Country:'DK',freq:{Year2005:2651,Year2010:3307,Year2015:3347}},
-    {Country:'DE',freq:{Year2005:2988,Year2010:3062,Year2015:3354}},
-    {Country:'EE',freq:{Year2005:1143,Year2010:1424,Year2015:1692}},
-    {Country:'IE',freq:{Year2005:3056,Year2010:3465,Year2015:3423}},
-    {Country:'EL',freq:{Year2005:2069,Year2010:2134,Year2015:2134}},
-    {Country:'ES',freq:{Year2005:2008,Year2010:2239,Year2015:2345}},
-    {Country:'FR',freq:{Year2005:2474,Year2010:2488,Year2015:2818}},
-    {Country:'HR',freq:{Year2005:1460,Year2010:1460,Year2015:1460}},
-    {Country:'IT',freq:{Year2005:2178,Year2010:2385,Year2015:2589}},
-    {Country:'CY',freq:{Year2005:1344,Year2010:2503,Year2015:2244}},
-    {Country:'LV',freq:{Year2005:844,Year2010:770,Year2015:1283}},
-    {Country:'LT',freq:{Year2005:924,Year2010:1047,Year2015:1228}},
-    {Country:'LU',freq:{Year2005:3104,Year2010:3182,Year2015:3601}},
-    {Country:'HU',freq:{Year2005:1132,Year2010:1395,Year2015:1524}},
-    {Country:'MT',freq:{Year2005:775,Year2010:2150,Year2015:2266}},
-    {Country:'NL',freq:{Year2005:2797,Year2010:2872,Year2015:3029}},
-    {Country:'AT',freq:{Year2005:2573,Year2010:2574,Year2015:2947}},
-    {Country:'PL',freq:{Year2005:1190,Year2010:1482,Year2015:1916}},
-    {Country:'PT',freq:{Year2005:1447,Year2010:1666,Year2015:1670}},
-    {Country:'RO',freq:{Year2005:608,Year2010:945,Year2015:1003}},
-    {Country:'SI',freq:{Year2005:1684,Year2010:1795,Year2015:2021}},
-    {Country:'SK',freq:{Year2005:1056,Year2010:1292,Year2015:1527}},
-    {Country:'FI',freq:{Year2005:2368,Year2010:2818,Year2015:2952}},
-    {Country:'SE',freq:{Year2005:2607,Year2010:2720,Year2015:3085}},
-    {Country:'UK',freq:{Year2005:3456,Year2010:3103,Year2015:2942}},
-    ];
+d3.tsv("codebeautify.tsv", type, function(error, crimea) {
+  if (error) throw error;
 
-    dashboard('#dashboard',freqData);
-    </script>
+  var layers = d3.layout.stack()(causes.map(function(c) {
+    return crimea.map(function(d) {
+      return {x: d.date, y: d[c]};
+    });
+  }));
+
+  x.domain(layers[0].map(function(d) { return d.x; }));
+  y.domain([0, d3.max(layers[layers.length - 1], function(d) { return d.y0 + d.y; })]).nice();
+
+  var layer = svg.selectAll(".layer")
+      .data(layers)
+    .enter().append("g")
+      .attr("class", "layer")
+      .style("fill", function(d, i) { return z(i); });
+
+  layer.selectAll("rect")
+      .data(function(d) { return d; })
+    .enter().append("rect")
+      .attr("x", function(d) { return x(d.x); })
+      .attr("y", function(d) { return y(d.y + d.y0); })
+      .attr("height", function(d) { return y(d.y0) - y(d.y + d.y0); })
+      .attr("width", x.rangeBand() - 1);
+
+  svg.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "axis axis--y")
+      .attr("transform", "translate(" + width + ",0)")
+      .call(yAxis);
+});
+
+function type(d) {
+  d.date = parseDate(d.date);
+  causes.forEach(function(c) { d[c] = +d[c]; });
+  return d;
+}
+
+</script>
+
 
 </body>
-</html>
