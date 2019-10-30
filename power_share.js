@@ -94,7 +94,7 @@ function power_share(datafile, divid) {
     
     // function to handle histogram.
     function histoGram(fD){
-        var hG={},    hGDim = {t: 60, r: 0, b: 30, l: 0};
+        var hG={},    hGDim = {t: 20, r: 10, b: 80, l: 0};
         hGDim.w = 550 - hGDim.l - hGDim.r, 
         hGDim.h = 300 - hGDim.t - hGDim.b;
             
@@ -111,7 +111,15 @@ function power_share(datafile, divid) {
         // Add x-axis to the histogram svg.
         hGsvg.append("g").attr("class", "x axis")
             .attr("transform", "translate(0," + hGDim.h + ")")
-            .call(d3.svg.axis().scale(x).orient("bottom"));
+            .call(d3.svg.axis().scale(x).orient("bottom"))
+            .selectAll("text")
+            .attr("y", 0)
+            .attr("x", 9)
+            .attr("dy", ".35em")
+            .attr("transform", "rotate(90)")
+            .style("text-anchor", "start");
+
+  
 
         // Create function for y-axis map.
         var y = d3.scale.linear().range([hGDim.h, 0])
@@ -135,7 +143,8 @@ function power_share(datafile, divid) {
         bars.append("text").text(function(d){ return d3.format(",")(d[1])})
             .attr("x", function(d) { return x(d[0])+x.rangeBand()/2; })
             .attr("y", function(d) { return y(d[1])-5; })
-            .attr("text-anchor", "middle");
+            .attr("text-anchor", "middle")
+            .style("font-size","8px")
         
         function mouseover(d){  // utility function to be called on mouseover.
             // filter for selected state.
@@ -170,7 +179,7 @@ function power_share(datafile, divid) {
             // transition the frequency labels location and change value.
             bars.select("text").transition().duration(500)
                 .text(function(d){ return d3.format(",")(d[1])})
-                .attr("y", function(d) {return y(d[1])-5; });            
+                .attr("y", function(d) {return y(d[1])-5; });          
         }        
         return hG;
     }
@@ -229,7 +238,7 @@ function power_share(datafile, divid) {
         var leg = {};
             
         // create table for legend.
-        var legend = d3.select(id).append("table").attr('class','legend');
+        var legend = d3.select(id).append("table").attr('class','legend').style("font-size","13px");
         
         // create one row per segment.
         var tr = legend.append("tbody").selectAll("tr").data(lD).enter().append("tr");
@@ -286,76 +295,4 @@ function power_share(datafile, divid) {
 
 
 
-var causes = ["wounds", "other", "disease"];
-
-var parseDate = d3.time.format("%m/%Y").parse;
-
-var margin = {top: 20, right: 50, bottom: 30, left: 20},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
-var x = d3.scale.ordinal()
-    .rangeRoundBands([0, width]);
-
-var y = d3.scale.linear()
-    .rangeRound([height, 0]);
-
-var z = d3.scale.category10();
-
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom")
-    .tickFormat(d3.time.format("%b"));
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("right");
-
-var svg = d3.select("#social").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-d3.tsv("crimea.tsv", type, function(error, crimea) {
-  if (error) throw error;
-
-  var layers = d3.layout.stack()(causes.map(function(c) {
-    return crimea.map(function(d) {
-      return {x: d.date, y: d[c]};
-    });
-  }));
-
-  x.domain(layers[0].map(function(d) { return d.x; }));
-  y.domain([0, d3.max(layers[layers.length - 1], function(d) { return d.y0 + d.y; })]).nice();
-
-  var layer = svg.selectAll(".layer")
-      .data(layers)
-    .enter().append("g")
-      .attr("class", "layer")
-      .style("fill", function(d, i) { return z(i); });
-
-  layer.selectAll("rect")
-      .data(function(d) { return d; })
-    .enter().append("rect")
-      .attr("x", function(d) { return x(d.x); })
-      .attr("y", function(d) { return y(d.y + d.y0); })
-      .attr("height", function(d) { return y(d.y0) - y(d.y + d.y0); })
-      .attr("width", x.rangeBand() - 1);
-
-  svg.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
-
-  svg.append("g")
-      .attr("class", "axis axis--y")
-      .attr("transform", "translate(" + width + ",0)")
-      .call(yAxis);
-});
-
-function type(d) {
-  d.date = parseDate(d.date);
-  causes.forEach(function(c) { d[c] = +d[c]; });
-  return d;
-}
+   

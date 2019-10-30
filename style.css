@@ -33,19 +33,26 @@ shape-rendering: crispEdges;
 
 .x.axis path {  display: none; }
 .legend{
-  margin-bottom:76px;
+  margin:0px;
   display:inline-block;
   border-collapse: collapse;
   border-spacing: 0px;
+  width:10px;
+  font-size: 5px;
 }
 .legend td{
   padding:4px 5px;
   vertical-align:bottom;
+  position:absolute;
+  top:20px;
+  left:18px;
+  
 }
 .legendFreq, .legendPerc{
   align:right;
-  width:50px;
+  width:10px;
 }
+
 
 
 #plot {
@@ -56,6 +63,18 @@ shape-rendering: crispEdges;
   margin: 20px;
   margin-left: 150px;
 }
+
+
+#dashboard {
+  background-color: white;
+  padding-left: 30px;
+  width: 1070px;
+  border-color: beige;
+  border: 1px solid;
+}
+
+
+
 
 #women {
   margin-left: 150px;
@@ -210,3 +229,11 @@ h3 {
 
 
 
+#container {
+  position: relative;
+}
+.num1,
+.num2 {
+  position: absolute;
+  left: 50px;
+}

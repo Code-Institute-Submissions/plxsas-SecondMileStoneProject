@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html>
-
+    <style>
+ 
+        body {
+          font: 10px sans-serif;
+        }
+         
+        .axis path,
+        .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+        }
+         
+        .bar {
+          fill: steelblue;
+        }
+         
+        .x.axis path {
+          display: none;
+        }
+         
+    </style>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,8 +43,9 @@
 
 
 
-<body onload ="power_share('women_share.csv', plot);">
+<body>
 
+    <!--document.getElementById("#social").onload = gender_social('female_social.csv',social );-->
 
     <div class="wrapper">
         <!-- Sidebar  -->
@@ -52,13 +74,13 @@
                     </ul>-->
                 </li>
                 <li>
-                    <a href="#">
+                    <!--<a href="#">
                         <i class="fas fa-briefcase"></i>
                         About
-                    </a>
+                    </a>-->
                     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-copy"></i>
-                        Statistics
+                        Statistics <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="collapse list-unstyled" id="pageSubmenu">
                         <li>
@@ -147,36 +169,7 @@
             </nav>
 
 
-            <div class="card-deck">
-                <div class="card card2">
-                    <div class="card-body">
-                        <i class="fas fa-female"></i>
-                        <p class="card-text">Women <br> 32,000.</p> 
-                    </div> 
-                    <hr class="hrcard">
-                    <p><i class="fas fa-sync-alt"></i>Updated now</p>
-                </div>
-
-                <div class="card card2">
-                    <div class="card-body">
-                        <i class="fas fa-male"></i>
-                        <p class="card-text">Men <br> 32,000.</p> 
-                    </div> 
-                    <hr class="hrcard">
-                    <p><i class="fas fa-sync-alt"></i>Updated now</p>
-                </div>
-
-                <div class="card card2">
-                    <div class="card-body">
-                        <i class="fas fa-database"></i>
-                        <p class="card-text">Total <br> 32,000.</p> 
-                    </div> 
-                    <hr class="hrcard">
-                    <p><i class="fas fa-sync-alt"></i>Updated now</p>
-                </div>
-            </div>
             
-            <div class="line"></div>
 
             <div class="card card3">
                 <div class="card-header">
@@ -192,12 +185,286 @@
             </div>
 
             
+            <div id='container'>
+                <div id="womensocial" class="num1">
+                    <script>
+                        var margin = {top: 20, right: 20, bottom: 30, left: 40},
+                            width = 960 - margin.left - margin.right,
+                            height = 500 - margin.top - margin.bottom;
+
+                        var x0 = d3.scale.ordinal()
+                            .rangeRoundBands([0, width], 0.1);
+                            
+                        var x1 = d3.scale.ordinal();
+                            
+                        var y = d3.scale.linear()
+                            .range([height, 0]);
+                            
+                        var xAxis = d3.svg.axis()
+                            .scale(x0)
+                            .orient("bottom");
+                            
+                            
+                        var yAxis = d3.svg.axis()
+                            .scale(y)
+                            .orient("left")
+                            .tickFormat(d3.format(".2s"));
+                            
+                        var color = d3.scale.ordinal()
+                            .range(["#d0743c", "#a05d56", "#6b486b","#8a89a6"]);
+                            
+                            
+                        var svg = d3.select("#womensocial").append("svg")
+                            .attr("width", width + margin.left + margin.right)
+                            .attr("height", height + margin.top + margin.bottom)
+                            .append("g")
+                            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                            
+                        var yBegin;
+                            
+                        var innerColumns = {
+                            "column1" : ["Caring responsibilites","Cooking and household","Sporting, cultural or leisure activities", "Voluntary or charitable activities"]
+                        }   
+                        d3.csv("female_social.csv", function(error, data) {
+                            var columnHeaders = d3.keys(data[0]).filter(function(key) { return key !== "State"; });
+                            color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
+                            data.forEach(function(d) {
+                                var yColumn = new Array();
+                                d.columnDetails = columnHeaders.map(function(name) {
+                                    for (ic in innerColumns) {
+                                        if($.inArray(name, innerColumns[ic]) >= 0){
+                                        if (!yColumn[ic]){
+                                            yColumn[ic] = 0;
+                                        }
+                                        yBegin = yColumn[ic];
+                                        yColumn[ic] += +d[name];
+                                        return {name: name, column: ic, yBegin: yBegin, yEnd: +d[name] + yBegin,};
+                                    }
+                                }
+                                });
+                            d.total = d3.max(d.columnDetails, function(d) { 
+                                return d.yEnd; 
+                            });
+                            });
+                            
+                            x0.domain(data.map(function(d) { return d.State; }));
+                            x1.domain(d3.keys(innerColumns)).rangeRoundBands([0, x0.rangeBand()]);
+                            
+                            y.domain([0, d3.max(data, function(d) { 
+                                return d.total; 
+                            })]);
+                            
+                            svg.append("g")
+                                .attr("class", "x axis")
+                                .attr("transform", "translate(0," + height + ")")
+                                .call(xAxis);  
+                            
+                            svg.append("g")
+                                .attr("class", "y axis")
+                                .call(yAxis)
+                                .append("text")
+                                .attr("transform", "rotate(-90)")
+                                .attr("y", 6)
+                                .attr("dy", ".7em")
+                                .style("text-anchor", "end")
+                                .text("");
+                            
+                            var project_stackedbar = svg.selectAll(".project_stackedbar")
+                                .data(data)
+                                .enter().append("g")
+                                .attr("class", "g")
+                                .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; });
+                            
+                            project_stackedbar.selectAll("rect")
+                                .data(function(d) { return d.columnDetails; })
+                                .enter().append("rect")
+                                .attr("width", x1.rangeBand())
+                                .attr("x", function(d) { 
+                                    return x1(d.column);
+                                    })
+                                .attr("y", function(d) { 
+                                    return y(d.yEnd); 
+                                })
+                                .attr("height", function(d) { 
+                                    return y(d.yBegin) - y(d.yEnd); 
+                                })
+                                .style("fill", function(d) { return color(d.name); });
+                            
+                            var legend = svg.selectAll(".legend")
+                                .data(columnHeaders.slice().reverse())
+                                .enter().append("g")
+                                .attr("class", "legend")
+                                .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+                            
+                            legend.append("rect")
+                                .attr("x", width - 18)
+                                .attr("width", 18)
+                                .attr("height", 18)
+                                .style("fill", color);
+                            
+                            legend.append("text")
+                                .attr("x", width - 24)
+                                .attr("y", 9)
+                                .attr("dy", ".35em")
+                                .style("text-anchor", "end")
+                                .text(function(d) { return d; });
+                            
+                        });
+                        
+                    </script>
+                </div>
+
+
+
+
+
+
+
+                <div id="mensocial" class="num2">
+                    <script>
+                        var margin = {top: 20, right: 20, bottom: 30, left: 40},
+                            width = 960 - margin.left - margin.right,
+                            height = 500 - margin.top - margin.bottom;
+
+                        var x0 = d3.scale.ordinal()
+                            .rangeRoundBands([0, width], 0.1);
+                            
+                        var x1 = d3.scale.ordinal();
+                            
+                        var y = d3.scale.linear()
+                            .range([height, 0]);
+                            
+                        var xAxis = d3.svg.axis()
+                            .scale(x0)
+                            .orient("bottom");
+                            
+                            
+                        var yAxis = d3.svg.axis()
+                            .scale(y)
+                            .orient("left")
+                            .tickFormat(d3.format(".2s"));
+                            
+                        var color = d3.scale.ordinal()
+                            .range(["#d0743c", "#a05d56", "#6b486b","#8a89a6"]);
+                            
+                            
+                        var svg = d3.select("#mensocial").append("svg")
+                            .attr("width", width + margin.left + margin.right)
+                            .attr("height", height + margin.top + margin.bottom)
+                            .append("g")
+                            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                            
+                        var yBegin;
+                            
+                        var innerColumns = {
+                            "column1" : ["Caring responsibilites","Cooking and household","Sporting, cultural or leisure activities", "Voluntary or charitable activities"]
+                        }   
+                        d3.csv("men_social.csv", function(error, data) {
+                            var columnHeaders = d3.keys(data[0]).filter(function(key) { return key !== "State"; });
+                            color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
+                            data.forEach(function(d) {
+                                var yColumn = new Array();
+                                d.columnDetails = columnHeaders.map(function(name) {
+                                    for (ic in innerColumns) {
+                                        if($.inArray(name, innerColumns[ic]) >= 0){
+                                        if (!yColumn[ic]){
+                                            yColumn[ic] = 0;
+                                        }
+                                        yBegin = yColumn[ic];
+                                        yColumn[ic] += +d[name];
+                                        return {name: name, column: ic, yBegin: yBegin, yEnd: +d[name] + yBegin,};
+                                    }
+                                }
+                                });
+                            d.total = d3.max(d.columnDetails, function(d) { 
+                                return d.yEnd; 
+                            });
+                            });
+                            
+                            x0.domain(data.map(function(d) { return d.State; }));
+                            x1.domain(d3.keys(innerColumns)).rangeRoundBands([0, x0.rangeBand()]);
+                            
+                            y.domain([0, d3.max(data, function(d) { 
+                                return d.total; 
+                            })]);
+                            
+                            svg.append("g")
+                                .attr("class", "x axis")
+                                .attr("transform", "translate(0," + height + ")")
+                                .call(xAxis);  
+                            
+                            svg.append("g")
+                                .attr("class", "y axis")
+                                .call(yAxis)
+                                .append("text")
+                                .attr("transform", "rotate(-90)")
+                                .attr("y", 6)
+                                .attr("dy", ".7em")
+                                .style("text-anchor", "end")
+                                .text("");
+                            
+                            var project_stackedbar = svg.selectAll(".project_stackedbar")
+                                .data(data)
+                                .enter().append("g")
+                                .attr("class", "g")
+                                .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; });
+                            
+                            project_stackedbar.selectAll("rect")
+                                .data(function(d) { return d.columnDetails; })
+                                .enter().append("rect")
+                                .attr("width", x1.rangeBand())
+                                .attr("x", function(d) { 
+                                    return x1(d.column);
+                                    })
+                                .attr("y", function(d) { 
+                                    return y(d.yEnd); 
+                                })
+                                .attr("height", function(d) { 
+                                    return y(d.yBegin) - y(d.yEnd); 
+                                })
+                                .style("fill", function(d) { return color(d.name); });
+                            
+                            var legend = svg.selectAll(".legend")
+                                .data(columnHeaders.slice().reverse())
+                                .enter().append("g")
+                                .attr("class", "legend")
+                                .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+                            
+                            legend.append("rect")
+                                .attr("x", width - 18)
+                                .attr("width", 18)
+                                .attr("height", 18)
+                                .style("fill", color);
+                            
+                            legend.append("text")
+                                .attr("x", width - 24)
+                                .attr("y", 9)
+                                .attr("dy", ".35em")
+                                .style("text-anchor", "end")
+                                .text(function(d) { return d; });
+                            
+                        });
+                            
+                    </script>
+                </div>
+            </div>
+
             
-            <div id="social"></div>
+
+
             
-        
+                    
+            
         </div>
     </div>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    
+
+
+
+        
+        
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

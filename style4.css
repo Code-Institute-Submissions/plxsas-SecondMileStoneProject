@@ -523,16 +523,16 @@ input {
 }
 
 #dashboard {
-    width: 1000px;
-    margin-left: 40px;
-    margin-right: 30px;
+    background-color: white;
+    padding-left: 30px;
+    width: 1070px;
+    border: 0.1px solid #dedfe0;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top:20px;
+    padding-bottom: 20px;
 }
-
-
-
-
-
-
 
 .axis text {
     font: 10px sans-serif;
@@ -549,3 +549,7 @@ input {
     display: none;
 }
   
+
+.fa-caret-down {
+    margin-left: 100px;
+}
