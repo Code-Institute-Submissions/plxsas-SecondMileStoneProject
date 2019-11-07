@@ -61,7 +61,7 @@
                     </a>
                     <ul class="collapse list-unstyled" id="pageSubmenu">
                         <li>
-                            <a href="power_share.html">Representation of women</a>
+                            <a href="power_share.html">Representation gap</a>
                         </li>
                         <li>
                             <a href="salary_gap.html">Salary gap</a>
@@ -185,8 +185,8 @@
                 </div>
             </div>
 
-            
-            <div id="dashboard"> </div>
+            <button id="femalesalary" class="btn btn-info">Female</button>
+            <div id="dashboard1"> </div>
             
             
             <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -225,12 +225,12 @@
                 {Country:'United Kingdom',freq:{Year2005:2503,Year2010:2284,Year2015:2242}},
                 ];
             
-                dashboard('#dashboard',freqData);
+                dashboard('#dashboard1',freqData);
             </script>
             
             
-            
-            
+            <button id="malesalary" class="btn btn-info">Male</button>
+            <div id="dashboard2"> </div>
             <script>
             
                 var freqData=[
@@ -264,7 +264,7 @@
                 {Country:'UK',freq:{Year2005:3456,Year2010:3103,Year2015:2942}},
                 ];
             
-                dashboard('#dashboard',freqData);
+                dashboard('#dashboard2',freqData);
             </script>
             
         </div>

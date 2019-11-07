@@ -104,6 +104,9 @@ function power_share(datafile, divid) {
             .attr("height", hGDim.h + hGDim.t + hGDim.b).append("g")
             .attr("transform", "translate(" + hGDim.l + "," + hGDim.t + ")");
 
+        
+
+
         // create function for x-axis mapping.
         var x = d3.scale.ordinal().rangeRoundBands([0, hGDim.w], 0.1)
                 .domain(fD.map(function(d) { return d[0]; }));
@@ -118,8 +121,6 @@ function power_share(datafile, divid) {
             .attr("dy", ".35em")
             .attr("transform", "rotate(90)")
             .style("text-anchor", "start");
-
-  
 
         // Create function for y-axis map.
         var y = d3.scale.linear().range([hGDim.h, 0])
@@ -145,6 +146,8 @@ function power_share(datafile, divid) {
             .attr("y", function(d) { return y(d[1])-5; })
             .attr("text-anchor", "middle")
             .style("font-size","8px")
+
+
         
         function mouseover(d){  // utility function to be called on mouseover.
             // filter for selected state.
@@ -281,6 +284,7 @@ function power_share(datafile, divid) {
     // calculate total frequency by segment for all state.
     var tF = ['Year2005','Year2010','Year2015'].map(function(d){ 
         return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+
     });    
     
     // calculate total frequency by state for all segment.
@@ -289,10 +293,315 @@ function power_share(datafile, divid) {
     var hG = histoGram(sF), // create the histogram.
         pC = pieChart(tF), // create the pie-chart.
         leg= legend(tF);  // create the legend.
+
+
+
+
 }
 
 
 
 
 
-   
+function women_social() {
+
+    var margin = {top: 40, right: 20, bottom: 90, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+    var x0 = d3.scale.ordinal()
+    .rangeRoundBands([0, width], 0.1);
+
+    var x1 = d3.scale.ordinal();
+
+    var y = d3.scale.linear()
+    .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+    .scale(x0)
+    .orient("bottom");
+
+
+    var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(d3.format(".2s"));
+
+    var color = d3.scale.ordinal()
+    .range(["#d0743c", "#a05d56", "#6b486b","#8a89a6"]);
+
+
+    var svg = d3.select("#womensocial").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var yBegin;
+
+    var innerColumns = {
+    "column1" : ["Caring responsibilites","Cooking and household","Sporting, cultural or leisure activities", "Voluntary or charitable activities"]
+    }   
+    d3.csv("female_social.csv", function(error, data) {
+    var columnHeaders = d3.keys(data[0]).filter(function(key) { return key !== "State"; });
+    color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
+    data.forEach(function(d) {
+        var yColumn = new Array();
+        d.columnDetails = columnHeaders.map(function(name) {
+            for (ic in innerColumns) {
+                if($.inArray(name, innerColumns[ic]) >= 0){
+                if (!yColumn[ic]){
+                    yColumn[ic] = 0;
+                }
+                yBegin = yColumn[ic];
+                yColumn[ic] += +d[name];
+                return {name: name, column: ic, yBegin: yBegin, yEnd: +d[name] + yBegin,};
+            }
+        }
+        });
+    d.total = d3.max(d.columnDetails, function(d) { 
+        return d.yEnd; 
+    });
+    });
+
+    x0.domain(data.map(function(d) { return d.State; }));
+    x1.domain(d3.keys(innerColumns)).rangeRoundBands([0, x0.rangeBand()]);
+
+    y.domain([0, d3.max(data, function(d) { 
+        return d.total; 
+    })]);
+
+    svg.append("text")
+    .attr("x", (width / 2))             
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")  
+    .style("font-size", "16px") 
+    .style("text-decoration", "underline")  
+    .text("Women's caring responsibilites and social activities");
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")  
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)" ); 
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".7em")
+        .style("text-anchor", "end")
+        .text("");
+
+    var women_project_stackedbar = svg.selectAll(".womens_project_stackedbar")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "g")
+        .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; });
+
+        women_project_stackedbar.selectAll("rect")
+        .data(function(d) { return d.columnDetails; })
+        .enter().append("rect")
+        .attr("width", x1.rangeBand())
+        .attr("x", function(d) { 
+            return x1(d.column);
+            })
+        .attr("y", function(d) { 
+            return y(d.yEnd); 
+        })
+        .attr("height", function(d) { 
+            return y(d.yBegin) - y(d.yEnd); 
+        })
+        .style("fill", function(d) { return color(d.name); });
+
+    var legend = svg.selectAll(".legend")
+        .data(columnHeaders.slice().reverse())
+        .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    legend.append("rect")
+        .attr("x", width - 18)
+        .attr("width", 18)
+        .attr("y", -40)
+        .attr("height", 18)
+        .style("fill", color);
+
+    legend.append("text")
+        .attr("x", width - 24)
+        .attr("y", -30)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(function(d) { return d; });
+
+    });
+}
+
+
+
+
+
+function men_social() {
+    var margin = {top: 100, right: 20, bottom: 90, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+    var x0 = d3.scale.ordinal()
+    .rangeRoundBands([0, width], 0.1);
+
+    var x1 = d3.scale.ordinal();
+
+    var y = d3.scale.linear()
+    .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+    .scale(x0)
+    .orient("bottom")
+
+
+    var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(d3.format(".2s"));
+
+    var color = d3.scale.ordinal()
+    .range(["#d0743c", "#a05d56", "#6b486b","#8a89a6"]);
+
+
+    var svg = d3.select("#mensocial").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var yBegin;
+
+    var innerColumns = {
+    "column1" : ["Caring responsibilites","Cooking and household","Sporting, cultural or leisure activities", "Voluntary or charitable activities"]
+    }   
+    d3.csv("men_social.csv", function(error, data) {
+    var columnHeaders = d3.keys(data[0]).filter(function(key) { return key !== "State"; });
+    color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
+    data.forEach(function(d) {
+        var yColumn = new Array();
+        d.columnDetails = columnHeaders.map(function(name) {
+            for (ic in innerColumns) {
+                if($.inArray(name, innerColumns[ic]) >= 0){
+                if (!yColumn[ic]){
+                    yColumn[ic] = 0;
+                }
+                yBegin = yColumn[ic];
+                yColumn[ic] += +d[name];
+                return {name: name, column: ic, yBegin: yBegin, yEnd: +d[name] + yBegin,};
+            }
+        }
+        });
+    d.total = d3.max(d.columnDetails, function(d) { 
+        return d.yEnd; 
+    });
+    });
+
+    x0.domain(data.map(function(d) { return d.State; }));
+    x1.domain(d3.keys(innerColumns)).rangeRoundBands([0, x0.rangeBand()]);
+
+    y.domain([0, d3.max(data, function(d) { 
+        return d.total; 
+    })]);
+
+
+
+    svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("Men's caring responsibilites and social activities");
+
+
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")  
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-65)" );
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".7em")
+        .style("text-anchor", "end")
+        .text("");
+
+    var men_project_stackedbar = svg.selectAll(".men_project_stackedbar")
+        .data(data)
+        .enter().append("g")
+        .attr("class", "g")
+        .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; });
+
+        men_project_stackedbar.selectAll("rect")
+        .data(function(d) { return d.columnDetails; })
+        .enter().append("rect")
+        .attr("width", x1.rangeBand())
+        .attr("x", function(d) { 
+            return x1(d.column);
+            })
+        .attr("y", function(d) { 
+            return y(d.yEnd); 
+        })
+        .attr("height", function(d) { 
+            return y(d.yBegin) - y(d.yEnd); 
+        })
+        .style("fill", function(d) { return color(d.name); });
+
+    var legend = svg.selectAll(".legend")
+        .data(columnHeaders.slice().reverse())
+        .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    legend.append("rect")
+        .attr("x", width - 18)
+        .attr("y", -80)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", color);
+
+    legend.append("text")
+        .attr("x", width - 24)
+        .attr("y", -70)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(function(d) { return d; });
+
+
+
+    
+
+    });
+}
+
+
+$('#sidebarCollapse').click(function() {
+    $('#togglebutton').css({
+        'margin-left': 'none'
+    });
+});
+
+
+$('sidebarCollapse').click(function() {
+    $('#togglebutton').addClass('fa2');
+  });
