@@ -342,7 +342,7 @@ function women_social() {
     var innerColumns = {
     "column1" : ["Caring responsibilites","Cooking and household","Sporting, cultural or leisure activities", "Voluntary or charitable activities"]
     }   
-    d3.csv("female_social.csv", function(error, data) {
+    d3.csv("assets/data/female_social.csv", function(error, data) {
     var columnHeaders = d3.keys(data[0]).filter(function(key) { return key !== "State"; });
     color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
     data.forEach(function(d) {
