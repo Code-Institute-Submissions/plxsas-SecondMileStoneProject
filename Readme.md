@@ -48,7 +48,21 @@ The project as it is stand at the moment has made use of the following coding la
 ## 5. Testing 
 ### 5.1 Version control:
 
-I have asked few people for a feedback on my website in terms of its relevancy and clarity. The feedback was good and the website achieved the intended outcome of providing a summary on the gender gap in Europe. One of the feedback was that my website layout and features are presented in the most concise and meaningful way. They can view both the live version and the GitHub repository by clicking on the Font Awesome icons. They were also able to download source code by clicking on the download button on the nav bar of each page. All clickable button have been checked to insure that the correct data types have been correctly rendered. All links will open in a new tab using 'target="_blank"'. All links have been manually tested to ensure that they are pointing to the correct destination. This site was tested across multiple browsers (Chrome, Safari, Internet Explorer, FireFox). I have validated both html files and css file on Markup Validation Service and made the suggested adjustment accordingly. 
+I have asked few people for a feedback on my website in terms of its relevancy and clarity. The feedback was good and the website achieved the intended outcome of providing a summary on the gender gap in Europe. One of the feedback was that my website layout and features are presented in the most concise, meaningful way and consistency. They had a comfortable and enjoyable browsing and visualization experiences as the color scheme is concernd. 
+
+All of the dropdown's elements in the side bar has been tested to insure that the intended page is correctly rendered. As the main aim of this project is to provide the user with a direct comparison, a clickable men and women buttons are on display to the user to toggle between the two gender data. I have mantually tested them and are perfectly working. 
+
+I have also tested the responsive design of the graph on the salary gap page and is working as intended. Hovering over on any of the bars or segments of the graph will display the desired results.  
+
+They can view both the live version and the GitHub repository by clicking on the Font Awesome icons. They were also able to download source code by clicking on the download button on the nav bar of each page. 
+
+In the side bar, I have added two clickable buttons. One for downloading the sources code of this project from the GitHub page and the other for directing the reader to an external web page if further reading is required. They are both tested and are working. 
+
+All clickable button have been checked to insure that the correct data types have been correctly rendered. 
+
+All links will open in a new tab using 'target="_blank"'. All links have been manually tested to ensure that they are pointing to the correct destination. 
+
+This site was tested across multiple browsers (Chrome, Safari, Internet Explorer, FireFox). I have validated both html files and css file on Markup Validation Service and made the suggested adjustment accordingly. 
 
 
 ### 5.2 Deployment
